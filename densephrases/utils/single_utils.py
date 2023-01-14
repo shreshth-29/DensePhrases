@@ -11,7 +11,10 @@ from transformers import (
     AutoConfig,
     AutoTokenizer,
     AutoModel,
+    pipeline
 )
+from optimum.onnxruntime import ORTModelForQuestionAnswering
+
 from densephrases import Encoder
 
 logger = logging.getLogger(__name__)
@@ -72,7 +75,7 @@ def load_encoder(device, args, phrase_only=False):
     # Prepare PLM if not load_dir
     pretrained = None
     if not args.load_dir:
-        pretrained = AutoModel.from_pretrained(
+        pretrained = ORTModelForQuestionAnswering.from_pretrained(
             args.pretrained_name_or_path,
             config=config,
             cache_dir=args.cache_dir if args.cache_dir else None,
